@@ -1,0 +1,26 @@
+version: "3"
+services:
+  server:
+    build:
+      context: ./Fhir/FhirApp/FhirApp
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - webappnetwork
+  client:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    links:
+      - server
+    networks:
+      - webappnetwork
+networks:
+  webappnetwork:
+    driver: bridge
